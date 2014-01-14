@@ -13,6 +13,6 @@
 //= require jquery
 //= require jquery_ujs
 //= require turbolinks
-//= require game/helpres
+//= require game/assets
 //= require game/objects
 //= require_tree .

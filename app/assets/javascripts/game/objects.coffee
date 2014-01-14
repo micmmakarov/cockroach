@@ -3,7 +3,7 @@ Game.Objects ||= {}
 
 Game.Map =
   pos: [0, 0]
-  image: "http://#{location.host}/pizza-transparent-bg.png"
+  image: Assets.Map.sprite
   load: ->
     image = new Image()
     image.src = @image
@@ -41,11 +41,8 @@ Game.Objects.Cockroach =
     @deadSprite = image
 
   sprites: []
-  images: [
-      "http://#{location.host}/cockroach-01.png",
-      "http://#{location.host}/cockroach-02.png"
-    ]
-  deadImage: "http://#{location.host}/cockroach-03.png"
+  images: Assets.Cockroach.sprites
+  deadImage:  Assets.Cockroach.deadSprite
   angle: 250
   alive: true
   move: (index) ->  
