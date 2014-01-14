@@ -3,7 +3,7 @@ Game.Objects ||= {}
 
 Game.Map =
   pos: [0, 0]
-  image: 'http://127.0.0.1:3000/assets/pizza-transparent-bg.png'
+  image: "http://#{location.host}/assets/pizza-transparent-bg.png"
   load: ->
     image = new Image()
     image.src = @image
@@ -27,18 +27,27 @@ Game.Objects.Cockroach =
     if @uturn <= 0
       @uturn = 180
   uturn: 0
-
+  kill: ->
+    @alive = false
+    Game.objects.splice(Game.objects.indexOf(@), 1)
+    Game.objects.unshift(@)
   load: ->
     for image_url in @images
       image = new Image()
       image.src = image_url
       @sprites.push(image)
+    image = new Image()
+    image.src = @deadImage
+    @deadSprite = image
+
   sprites: []
   images: [
-      'http://127.0.0.1:3000/assets/cockroach-01.png',
-      'http://127.0.0.1:3000/assets/cockroach-02.png'
+      "http://#{location.host}/assets/cockroach-01.png",
+      "http://#{location.host}/assets/cockroach-02.png"
     ]
+  deadImage: "http://#{location.host}/assets/cockroach-03.png"
   angle: 250
+  alive: true
   move: (index) ->  
     x = @pos[0] + @width /2 
     y = @pos[1] + @height/2
@@ -71,10 +80,14 @@ Game.Objects.Cockroach =
 
   currentSpriteIndex: 0
   currentSprite: ->
-    @sprites[@currentSpriteIndex]
+    if @alive
+      @sprites[@currentSpriteIndex]
+    else
+      @deadSprite
   distance: 0
   render: (index) ->
-    @move(index)
+    if @alive
+      @move(index)
     ctx = Game.ctx
     x = @pos[0] + @width /2 + Game.Map.pos[0]
     y = @pos[1] + @height/2 + Game.Map.pos[1]

@@ -9,13 +9,6 @@ Game.requestAnimFrame = (->
 )()
 
 $ ->
-  resources.load([
-    '127.0.0.1:3000/assets/cockroach-02.png',
-    '127.0.0.1:3000/assets/cockroach-02.png'
-  ])
-  resources.onReady(Game.init)
-
-$ ->
   Game.canvas = document.getElementById('canvas')
   Game.canvas.addEventListener 'mousedown', (e) ->
     for object in Game.objects
@@ -23,7 +16,7 @@ $ ->
       y = object.pos[1] + Map.pos[1]
       console.log "X ", e.clientX, x
       if e.clientX > x && e.clientX < x + object.width && e.clientY > y && e.clientY < y + object.height
-        Game.objects.splice(Game.objects.indexOf(object), 1)
+        object.kill()
 
   canvas = Game.canvas
   canvas.width = $(window).width() - 20
