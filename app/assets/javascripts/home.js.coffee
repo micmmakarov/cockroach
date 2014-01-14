@@ -17,6 +17,14 @@ $ ->
 
 $ ->
   Game.canvas = document.getElementById('canvas')
+  Game.canvas.addEventListener 'mousedown', (e) ->
+    for object in Game.objects
+      x = object.pos[0] + Map.pos[0]
+      y = object.pos[1] + Map.pos[1]
+      console.log "X ", e.clientX, x
+      if e.clientX > x && e.clientX < x + object.width && e.clientY > y && e.clientY < y + object.height
+        Game.objects.splice(Game.objects.indexOf(object), 1)
+
   canvas = Game.canvas
   canvas.width = $(window).width() - 20
   canvas.height = $(window).height()
@@ -26,18 +34,25 @@ $ ->
   Map.load()
   Game.main()
 
+  $("#track").click ->
+    Game.trackObject = !!!Game.trackObject
+
+Game.addCockroach = (name) ->
+  cockroach = $.extend(true, {}, Game.Objects.Cockroach);
+  cockroach.load()
+  cockroach.name = "name"
+  cockroach.pos[0] = Math.floor(Math.random() * Game.canvas.width)
+  cockroach.pos[1] = Math.floor(Math.random() * Game.canvas.height)
+  cockroach.angle =  Math.floor(Math.random() * 360)
+  Game.objects.push(cockroach)
+
 Game.init = ->
   Game.objects = []
   i = 0
-  while i < 10000
+  while i < 3
     i++
-    cockroach = $.extend(true, {}, Game.Objects.Cockroach);
-    cockroach.load()
-    cockroach.name = "Cockroach #{i}"
-    cockroach.pos[0] = Math.floor(Math.random() * Game.canvas.width)
-    cockroach.pos[1] = Math.floor(Math.random() * Game.canvas.height)
-    cockroach.angle =  Math.floor(Math.random() * 360)
-    Game.objects.push(cockroach)
+    Game.addCockroach("Cockroach #{i}")
+    
 
 Game.renderObjects = (index) ->
   for object in Game.objects
@@ -52,8 +67,9 @@ Game.render = (index) ->
   ctx.fillStyle = '#000000'
   ctx.fillRect(0, 0, canvas.width, canvas.height)
   
-  #Map.pos[0] = - Game.objects[0].pos[0] + Game.canvas.width / 2
-  #Map.pos[1] = - Game.objects[0].pos[1] + Game.canvas.height / 2
+  if Game.trackObject
+    Map.pos[0] = - Game.objects[0].pos[0] + Game.canvas.width / 2
+    Map.pos[1] = - Game.objects[0].pos[1] + Game.canvas.height / 2
   
   Game.renderMap(index)
   Game.renderObjects(index)
@@ -69,8 +85,12 @@ Game.main = ->
   Game.lastTime = now
   window.setTimeout Game.main, 1000 / 60
 
+  if Math.floor(Math.random()*20) == 5
+    Game.addCockroach("random cockroach")
+
 #processKey = (e) ->
   #left
   #if e.keyCode == 37
 
 #window.addEventListener('keydown',processKey,false);
+

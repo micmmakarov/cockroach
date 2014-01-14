@@ -3,7 +3,7 @@ Game.Objects ||= {}
 
 Game.Map =
   pos: [0, 0]
-  image: 'http://127.0.0.1:3000/assets/pizza.jpg'
+  image: 'http://127.0.0.1:3000/assets/pizza-transparent-bg.png'
   load: ->
     image = new Image()
     image.src = @image
